@@ -982,26 +982,6 @@ package org.purepdf.pdf.codec
 			}
 		}
 		
-		/*private static void decodeAverageFilter(byte[] curr, byte[] prev,
-			int count, int bpp) {
-				int raw, priorPixel, priorRow;
-				
-				for (int i = 0; i < bpp; i++) {
-					raw = curr[i] & 0xff;
-					priorRow = prev[i] & 0xff;
-					
-					curr[i] = (byte)(raw + priorRow/2);
-				}
-				
-				for (int i = bpp; i < count; i++) {
-					raw = curr[i] & 0xff;
-					priorPixel = curr[i - bpp] & 0xff;
-					priorRow = prev[i] & 0xff;
-					
-					curr[i] = (byte)(raw + (priorPixel + priorRow)/2);
-				}
-			}*/
-
 		private static function paethPredictor( a: int, b: int, c: int ): int
 		{
 			var p: int = a + b - c;
