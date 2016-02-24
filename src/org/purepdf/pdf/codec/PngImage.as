@@ -243,7 +243,7 @@ package org.purepdf.pdf.codec
 						break;
 					case PNG_FILTER_AVERAGE:
 						///throw new NonImplementatioError();
-						//decodeAverageFilter( curr, prior, bytesPerRow, bytesPerPixel );
+						decodeAverageFilter( curr, prior, bytesPerRow, bytesPerPixel );
 						break;
 					case PNG_FILTER_PAETH:
 						decodePaethFilter( curr, prior, bytesPerRow, bytesPerPixel );
@@ -959,6 +959,48 @@ package org.purepdf.pdf.codec
 				curr[ i ] = ( raw + prior );
 			}
 		}
+		
+		private static function decodeAverageFilter(curr:Bytes, prev:Bytes, count:int, bpp:int):void
+		{
+			var raw:int, priorPixel:int, priorRow:int;
+			
+			for (var i:int = 0; i < bpp; i++)
+			{
+				raw = curr[i] & 0xff;
+				priorRow = prev[i] & 0xff;
+				
+				curr[i] = raw + priorRow/2;
+			}
+			
+			for (i = bpp; i < count; i++)
+			{
+				raw = curr[i] & 0xff;
+				priorPixel = curr[i - bpp] & 0xff;
+				priorRow = prev[i] & 0xff;
+				
+				curr[i] = (raw + (priorPixel + priorRow)/2);
+			}
+		}
+		
+		/*private static void decodeAverageFilter(byte[] curr, byte[] prev,
+			int count, int bpp) {
+				int raw, priorPixel, priorRow;
+				
+				for (int i = 0; i < bpp; i++) {
+					raw = curr[i] & 0xff;
+					priorRow = prev[i] & 0xff;
+					
+					curr[i] = (byte)(raw + priorRow/2);
+				}
+				
+				for (int i = bpp; i < count; i++) {
+					raw = curr[i] & 0xff;
+					priorPixel = curr[i - bpp] & 0xff;
+					priorRow = prev[i] & 0xff;
+					
+					curr[i] = (byte)(raw + (priorPixel + priorRow)/2);
+				}
+			}*/
 
 		private static function paethPredictor( a: int, b: int, c: int ): int
 		{
